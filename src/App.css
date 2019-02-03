@@ -1,12 +1,18 @@
 .App {
   text-align: center;
+
 }
 .form-container{
     margin:10px;
 
 }
 .input-container{
-    width: 180px;
+    width: 280px;
+    height:30px;
     margin:10px;
     border-radius: 5px;
+}
+
+.button{
+    width:30;
 }

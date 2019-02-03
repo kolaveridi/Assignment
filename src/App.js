@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import ListWeather from './Components/ListWeather';
 let API_KEY='4b57ce179f3560a914e8e19f3feaba5b';
-let dates=[];
 class App extends Component {
 
     constructor(props){
@@ -17,11 +16,11 @@ class App extends Component {
             longitude:'',
             errormessage:'',
             error:false,
-            response:''
+            response:'',
+            cityinresponse:''
         };
     }
     onChangeCity =(event)=>{
-
         this.setState({
            city:event.target.value
        });
@@ -32,33 +31,36 @@ class App extends Component {
       });
   }
 
-    onSubmit =(event)=>{
-
-        let city = event.target.elements.city.value;
-        let country = event.target.elements.country.value;
+    onSubmit = (event) => {
         event.preventDefault();
+        const {city,country} = this.state;
         this.loadWeather(city,country);
     }
 
-    loadWeather =async(city,country)=>{
+
+
+    loadWeather = async(city,country)=>{
 
 
       let url=`http://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&appid=${API_KEY}`;
 
       const api_call = await fetch(url);
       const result = await api_call.json();
+      console.log('result',result);
 
       if(result.cod==='404'){
           this.setState({
               errormessage:result.message,
               error:true,
-              response:[]
+              response:[],
+              cityinresponse:''
           });
       }
       else{
 
           this.setState({
-               error:false,
+              error:false,
+              cityinresponse:result.city.name,
               response: result.list.map(item => ({
 				date: item.dt_txt.split(" ")[0],
                 time:item.dt_txt.split(" ")[1],
@@ -75,11 +77,11 @@ class App extends Component {
 
   render() {
 
-    console.log('response',this.state.response);
+    console.log('response',this.state.cityinresponse);
     return (
       <div className="App">
          <h1> Weather App </h1>
-          <h6>Weather forecasts show</h6>
+          <h3>{this.state.cityinresponse}</h3>
            <form   onSubmit ={this.onSubmit }>
               <div className="form-container">
                  <input
@@ -87,16 +89,19 @@ class App extends Component {
                     onChange ={(event)=>this.onChangeCity(event)}
                     placeholder='City '
                     value ={this.state.city}
+                    required={true}
                     name='city'
                   />
                   <input
-                     className="input-container"
-                     onChange ={(event)=>this.onChangeCountry(event)}
-                     placeholder='Country'
-                     value ={this.state.country}
-                     name='country'
+                    className="input-container"
+                    onChange ={(event)=>this.onChangeCountry(event)}
+                    placeholder='Country'
+                    value ={this.state.country}
+                    name='country'
+                    required={true}
                    />
                  < button
+                   className="button"
 
                   type="submit"
                   >Submit </button>
@@ -104,9 +109,10 @@ class App extends Component {
              </form>
 
           <ListWeather
-          data={this.state.response}
-          error={this.state.error}
-          errormessage={this.state.errormessage}
+            city={this.state.cityinresponse}
+            data={this.state.response}
+            error={this.state.error}
+            errormessage={this.state.errormessage}
           />
       </div>
     );
