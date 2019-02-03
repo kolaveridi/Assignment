@@ -13,6 +13,8 @@ class App extends Component {
         this.state={
             city:'',
             country:'',
+            latitude:'',
+            longitude:'',
             errormessage:'',
             error:false,
             response:''
@@ -29,6 +31,7 @@ class App extends Component {
           country:event.target.value
       });
   }
+
     onSubmit =(event)=>{
 
         let city = event.target.elements.city.value;
@@ -36,6 +39,7 @@ class App extends Component {
         event.preventDefault();
         this.loadWeather(city,country);
     }
+
     loadWeather =async(city,country)=>{
 
 
@@ -54,7 +58,7 @@ class App extends Component {
       else{
 
           this.setState({
-
+               error:false,
               response: result.list.map(item => ({
 				date: item.dt_txt.split(" ")[0],
                 time:item.dt_txt.split(" ")[1],
@@ -76,15 +80,17 @@ class App extends Component {
       <div className="App">
          <h1> Weather App </h1>
           <h6>Weather forecasts show</h6>
-           <form onSubmit ={this.onSubmit }>
-              <div className="main-container">
+           <form   onSubmit ={this.onSubmit }>
+              <div className="form-container">
                  <input
+                    className="input-container"
                     onChange ={(event)=>this.onChangeCity(event)}
                     placeholder='City '
                     value ={this.state.city}
                     name='city'
                   />
                   <input
+                     className="input-container"
                      onChange ={(event)=>this.onChangeCountry(event)}
                      placeholder='Country'
                      value ={this.state.country}
@@ -96,6 +102,7 @@ class App extends Component {
                   >Submit </button>
                </div>
              </form>
+
           <ListWeather
           data={this.state.response}
           error={this.state.error}
