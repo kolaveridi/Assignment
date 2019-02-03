@@ -47,7 +47,8 @@ class App extends Component {
       if(result.cod==='404'){
           this.setState({
               errormessage:result.message,
-              error:true
+              error:true,
+              response:[]
           });
       }
       else{
@@ -74,8 +75,9 @@ class App extends Component {
     return (
       <div className="App">
          <h1> Weather App </h1>
+          <h6>Weather forecasts show</h6>
            <form onSubmit ={this.onSubmit }>
-              <div>
+              <div className="main-container">
                  <input
                     onChange ={(event)=>this.onChangeCity(event)}
                     placeholder='City '
@@ -89,6 +91,7 @@ class App extends Component {
                      name='country'
                    />
                  < button
+
                   type="submit"
                   >Submit </button>
                </div>

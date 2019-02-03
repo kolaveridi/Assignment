@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import Weather from './Weather';
+import ListWeatherstyle from './ListWeatherstyle.css';
 let dates = new Set();
 class ListWeather extends React.Component{
     constructor(props){
@@ -10,7 +11,7 @@ class ListWeather extends React.Component{
         };
     }
     updateWeather=(date)=>{
-          console.log('date is ',date);
+
          let todaydata=[];
          for(let i=0;i<this.props.data.length;i++){
               let item =this.props.data[i];
@@ -26,7 +27,7 @@ class ListWeather extends React.Component{
 
 
          }
-         console.log('todaydata',todaydata);
+
 
 
      }
@@ -38,8 +39,8 @@ class ListWeather extends React.Component{
         let arr=[];
         dates.forEach( date => {
            arr.push(
-               <div  key ={date} className="date-button">
-               <button onClick={()=>this.updateWeather(date)}>{date} </button>
+               <div  key ={date} >
+               <button className="button" onClick={()=>this.updateWeather(date)}>{date} </button>
                </div>
            )
         });
@@ -71,23 +72,31 @@ class ListWeather extends React.Component{
 
 
         return(
-          <div>
-            Weather forecasts show
+          <div >
+
             {
               error ?
                <h1>{errormessage.toUpperCase()}</h1>
                :null
             }
-            {this.renerBlock()}
-            
+
+            <div className="button-container">
+            {   error ===false ?
+                this.renerBlock()
+                :null
+            }
+
+            </div>
+
             {
+                error ===false?
                  this.state.today.map(item => {
                             return (
                                 <Weather
                                     data={item}
                                 />
                             );
-                        })
+                        }):null
 
 
             }
